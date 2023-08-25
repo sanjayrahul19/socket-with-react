@@ -8,7 +8,11 @@ export const useSocketContext = () => {
 };
 
 const Socket = ({ children }) => {
-  const socket = io("http://localhost:8000?id=64e602e6655faf323405963c");
+  const socket = io("http://localhost:8000?id=64e60300655faf323405963f",{
+    reconnection: true,         // Enable reconnection
+    reconnectionAttempts: 5,   // Number of reconnection attempts
+    reconnectionDelay: 1000,   // Delay between reconnection attempts (in milliseconds)
+  });
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -20,6 +24,7 @@ const Socket = ({ children }) => {
     })
 
     return () => {
+      socket.off("addContact")
       socket.disconnect();
     };
   }, [socket]);
